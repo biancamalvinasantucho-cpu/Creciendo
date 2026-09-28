@@ -13,7 +13,7 @@
     </header>
 
     <section class="contenedor-registro">
-        <form action="registrar-usuario.php" method="POST">
+        <form action="registrar-login.php" method="POST">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
@@ -32,6 +32,25 @@
             <div class="form-group">
                 <label for="contrasenia">Contraseña</label>
                 <input type="password" id="contrasenia" name="contrasenia" placeholder="••••••••" required>
+            </div>
+
+            <!-- Selección de Rol / Rubro -->
+            <div class="form-group">
+                <label class="label-titulo">Seleccioná tu Rol / Rubro:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="auxiliar" required>
+                        <span>Auxiliar</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="tutor" required>
+                        <span>Tutor/a</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="maestro" required>
+                        <span>Maestro/a</span>
+                    </label>
+                </div>
             </div>
             
             <button type="submit">Crear Cuenta</button>

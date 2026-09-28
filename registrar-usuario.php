@@ -17,9 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasenia = isset($_POST['contrasenia']) ? trim($_POST['contrasenia']) : '';
     $telefono    = isset($_POST['telefono']) ? trim($_POST['telefono']) : null;
     
-    // Le asignamos 'tutor' si no viene ningún rol desde el formulario
-    $rol         = (!empty($_POST['rol'])) ? trim($_POST['rol']) : 'tutor';
+    // Obtenemos el rol desde el formulario (limpiamos espacio y pasamos a minúsculas)
+    $rol = (!empty($_POST['rol'])) ? strtolower(trim($_POST['rol'])) : 'tutor';
 
+    // Validamos que no vengan vacíos los campos requeridos
     if (empty($nombre) || empty($apellido) || empty($email) || empty($contrasenia)) {
         echo "<script>
                 alert('Por favor, completa todos los campos requeridos.');
@@ -28,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Verificamos si el email ya existe en la base de datos
     $checkEmail = $db->prepare("SELECT id FROM usuarios WHERE email = :email");
     $checkEmail->execute([':email' => $email]);
 
@@ -39,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Se guarda directamente en texto plano sin encriptar
+    // Se guarda directamente en texto plano
     $password = $contrasenia;
 
-    // Mantenemos 'password' como tenés la columna en tu BD e incluimos 'rol'
+    // Guardamos en la base de datos
     $query = $db->prepare("
         INSERT INTO usuarios (nombre, apellido, email, password, rol, telefono) 
         VALUES (:nombre, :apellido, :email, :password, :rol, :telefono)
@@ -58,14 +60,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     if ($resultado) {
+        // Guardamos los datos en la sesión
         $_SESSION['usuario_id'] = $db->lastInsertId();
         $_SESSION['nombre']     = $nombre;
         $_SESSION['apellido']   = $apellido;
         $_SESSION['email']      = $email;
         $_SESSION['rol']        = $rol;
 
-        header('Location: index.html');
-        exit;
+        // Redirección según el rol recibido a la carpeta /roles/
+        switch ($rol) {
+            case 'auxiliar':
+                header('Location: roles/auxiliares/panel-auxiliar.html');
+                exit;
+
+            case 'maestro':
+            case 'maestro/a':
+                header('Location: roles/maestros/panel-maestro.html');
+                exit;
+
+            case 'tutor':
+            case 'tutor/a':
+            default:
+                header('Location: roles/tutores/panel-tutor.html');
+                exit;
+        }
+
     } else {
         echo "<script>
                 alert('Ocurrió un error al registrar el usuario.');
