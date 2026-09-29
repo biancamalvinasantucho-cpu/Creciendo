@@ -1,13 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Tutores</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Identificación de Tutor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-color: #f7f3ed;
+    --card-bg: #ffffff;
+    --text-main: #2b2d42;
+    --primary: #3b82f6;
+
+    /* tokens derivados para completar el sistema */
+    --border-color: #e5e7eb;
+    --text-muted: #8b8d98;
+    --shadow-card: 0 16px 40px rgba(43, 45, 66, 0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .id-card {
+    width: 90%;
+    max-width: 360px;
+    background: var(--card-bg);
+    border-radius: 24px;
+    box-shadow: var(--shadow-card);
+    padding: 34px 24px 28px;
+    text-align: center;
+    position: relative;
+  }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .tutor-name {
+    margin: 0 0 4px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .tutor-dni {
+    margin: 0 0 28px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+
+  .qr-wrap {
+    background: var(--bg-color);
+    border-radius: 18px;
+    padding: 18px;
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+
+  .qr-wrap img {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    border-radius: 6px;
+  }
+
+  .perforation {
+    position: relative;
+    height: 1px;
+    margin: 0 -24px 20px;
+  }
+
+  .perforation .dash {
+    border-top: 2px dashed var(--border-color);
+    margin: 0 22px;
+  }
+
+  .perforation .circle {
+    position: absolute;
+    top: -9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bg-color);
+  }
+
+  .perforation .circle.left { left: -9px; }
+  .perforation .circle.right { right: -9px; }
+
+  .instruction {
+    margin: 0;
+    padding: 0 8px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-main);
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Panel Tutores</h1>
-    </header>
+
+<div class="id-card">
+  <p class="eyebrow">Identificación de tutor</p>
+  <h1 class="tutor-name">Marcela Fernández</h1>
+  <p class="tutor-dni">DNI 28.456.123</p>
+
+  <div class="qr-wrap">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=TUTOR-28456123-JARDIN" alt="Código QR de identificación del tutor">
+  </div>
+
+  <div class="perforation">
+    <span class="dash"></span>
+    <span class="circle left"></span>
+    <span class="circle right"></span>
+  </div>
+
+  <p class="instruction">Presentá este código en la puerta del jardín</p>
+</div>
+
 </body>
 </html>

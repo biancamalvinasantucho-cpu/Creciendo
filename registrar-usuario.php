@@ -67,33 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['email']      = $email;
         $_SESSION['rol']        = $rol;
 
-        // Redirección según el rol recibido a la carpeta /roles/
-        switch ($rol) {
-            case 'auxiliar':
-                header('Location: roles/auxiliares/panel-auxiliar.html');
-                exit;
-
-            case 'maestro':
-            case 'maestro/a':
-                header('Location: roles/maestros/panel-maestro.html');
-                exit;
-
-            case 'tutor':
-            case 'tutor/a':
-            default:
-                header('Location: roles/tutores/panel-tutor.html');
-                exit;
-        }
-
-    } else {
-        echo "<script>
-                alert('Ocurrió un error al registrar el usuario.');
-                window.location.href = 'registrar-usuario.html';
-              </script>";
-        exit;
-    }
-
+     header('Location: roles/auxiliares/registrar-usuario.html');   
 } else {
     header('Location: registrar-usuario.html');
     exit;
+}
 }

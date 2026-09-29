@@ -1,13 +1,502 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Auxiliar</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Retiro Seguro · Portería Principal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #f7f3ed;
+    --card-bg: #ffffff;
+    --text-main: #2b2d42;
+    --primary: #3b82f6;
+
+    /* tokens derivados para completar el sistema */
+    --border-color: #e5e7eb;
+    --text-muted: #8b8d98;
+    --confirm-green: #22c55e;
+    --confirm-green-dark: #16a34a;
+    --shadow-soft: 0 6px 18px rgba(43, 45, 66, 0.07);
+    --shadow-card: 0 12px 32px rgba(43, 45, 66, 0.12);
+    --radius-card: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  h1, h2, .brand { font-family: 'Nunito', sans-serif; }
+
+  /* ---------- HEADER ---------- */
+  header.top-bar {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand-block { display: flex; align-items: center; gap: 12px; }
+
+  .brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .brand h1 { margin: 0; font-size: 18px; font-weight: 800; }
+  .brand p { margin: 1px 0 0; font-size: 12.5px; color: var(--text-muted); }
+
+  #clock { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+  /* ---------- LAYOUT ---------- */
+  .scan-screen {
+    padding: 22px 20px 40px;
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  @media (min-width: 860px) {
+    .scan-screen {
+      grid-template-columns: 340px 1fr;
+      align-items: start;
+    }
+  }
+
+  /* ---------- SECCIÓN CÁMARA ---------- */
+  .camera-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 20px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .viewfinder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 300px;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #2b2d42, #1c1d2e);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #ffffff;
+  }
+  .corner-tl { top: 14px; left: 14px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+  .corner-tr { top: 14px; right: 14px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
+  .corner-bl { bottom: 14px; left: 14px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
+  .corner-br { bottom: 14px; right: 14px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+
+  .scan-line {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: var(--confirm-green);
+    box-shadow: 0 0 8px var(--confirm-green);
+    animation: scan-move 2.2s ease-in-out infinite;
+  }
+
+  @keyframes scan-move {
+    0%, 100% { top: 18%; opacity: 0.9; }
+    50% { top: 78%; opacity: 0.4; }
+  }
+
+  .viewfinder-icon {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 56px;
+  }
+
+  .viewfinder.waiting-pulse {
+    animation: pulse-bg 1.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-bg {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.25); }
+  }
+
+  .scan-instruction {
+    margin: 0;
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    max-width: 260px;
+    line-height: 1.5;
+  }
+
+  .simulate-btn {
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--primary);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .simulate-btn:hover { background: var(--bg-color); }
+
+  /* ---------- TARJETA DE VALIDACIÓN ---------- */
+  .validation-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-card);
+    padding: 28px 26px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .validation-card.visible { display: flex; }
+
+  .status-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--confirm-green-dark);
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+
+  .tutor-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--bg-color);
+    box-shadow: 0 0 0 1px var(--border-color);
+    margin-bottom: 14px;
+  }
+
+  .tutor-name {
+    margin: 0 0 4px;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .tutor-meta {
+    margin: 0 0 22px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .children-block {
+    width: 100%;
+    max-width: 380px;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+
+  .children-label {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .child-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--bg-color);
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
+  .child-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .child-info { display: flex; flex-direction: column; }
+  .child-info .child-name { font-weight: 700; font-size: 14.5px; }
+  .child-info .child-room { font-size: 12.5px; color: var(--text-muted); }
+
+  .child-row i { margin-left: auto; color: var(--confirm-green); font-size: 16px; }
+
+  .confirm-btn {
+    width: 100%;
+    max-width: 380px;
+    background: var(--confirm-green);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 18px;
+    padding: 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .confirm-btn:hover { background: var(--confirm-green-dark); }
+  .confirm-btn:active { transform: scale(0.98); }
+
+  .rescan-btn {
+    margin-top: 14px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* ---------- TOAST ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text-main);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 60;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast i { color: var(--confirm-green); }
+
+  @media (max-width: 640px) {
+    .scan-screen { padding: 18px 16px 32px; }
+    .validation-card { padding: 24px 18px; }
+    .tutor-name { font-size: 24px; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Panel Auxiliar</h1>
-    </header>
+
+<header class="top-bar">
+  <div class="brand-block">
+    <div class="brand-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <div class="brand">
+      <h1>Retiro Seguro</h1>
+      <p>Portería Principal</p>
+    </div>
+  </div>
+  <div id="clock">--:--</div>
+</header>
+
+<div class="scan-screen">
+
+  <!-- Sección 1: visor de cámara -->
+  <section class="camera-section">
+    <div class="viewfinder" id="viewfinder">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+      <div class="scan-line" id="scan-line"></div>
+      <i class="fa-solid fa-qrcode viewfinder-icon" id="viewfinder-icon"></i>
+    </div>
+    <p class="scan-instruction">Apuntá la cámara al código QR del tutor para validar el retiro</p>
+    <button class="simulate-btn" id="simulate-btn">Simular escaneo</button>
+  </section>
+
+  <!-- Sección 2: tarjeta de validación (oculta por defecto en producción; -->
+  <!-- se muestra ya en estado "éxito" acá para previsualizar el diseño) -->
+  <section class="validation-card visible" id="validation-card">
+    <div class="status-banner"><i class="fa-solid fa-circle-check"></i> Código válido</div>
+    <img class="tutor-photo" id="tutor-photo" src="" alt="Foto del tutor">
+    <h2 class="tutor-name" id="tutor-name"></h2>
+    <p class="tutor-meta" id="tutor-meta"></p>
+
+    <div class="children-block">
+      <p class="children-label">Autorizado/a a retirar a:</p>
+      <div id="children-list"></div>
+    </div>
+
+    <button class="confirm-btn" id="confirm-btn">
+      <i class="fa-solid fa-check"></i> Confirmar retiro
+    </button>
+    <button class="rescan-btn" id="rescan-btn">Escanear otro código</button>
+  </section>
+
+</div>
+
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toast-text">Retiro confirmado</span>
+</div>
+
+<script>
+  // Datos de ejemplo: en producción esto vendría de la validación real del QR
+  const sampleTutors = [
+    {
+      name: "Marcela Fernández",
+      dni: "28.456.123",
+      relation: "Familiar autorizado",
+      photoSeed: "Marcela+Fernandez",
+      children: [
+        { name: "Thiago Pérez", room: "Sala Los Pollitos" },
+        { name: "Martina Pérez", room: "Sala Las Abejitas" }
+      ]
+    },
+    {
+      name: "Carlos Domínguez",
+      dni: "31.902.874",
+      relation: "Padre",
+      photoSeed: "Carlos+Dominguez",
+      children: [
+        { name: "Isabella Rodríguez", room: "Sala Los Pollitos" }
+      ]
+    }
+  ];
+
+  let tutorIndex = 0;
+
+  const viewfinder = document.getElementById('viewfinder');
+  const viewfinderIcon = document.getElementById('viewfinder-icon');
+  const scanLine = document.getElementById('scan-line');
+  const validationCard = document.getElementById('validation-card');
+  const simulateBtn = document.getElementById('simulate-btn');
+  const rescanBtn = document.getElementById('rescan-btn');
+  const confirmBtn = document.getElementById('confirm-btn');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toast-text');
+
+  function renderTutor(tutor) {
+    document.getElementById('tutor-photo').src =
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.photoSeed)}&background=3b82f6&color=fff&rounded=true&size=200&bold=true`;
+    document.getElementById('tutor-name').textContent = tutor.name;
+    document.getElementById('tutor-meta').textContent = `DNI ${tutor.dni} · ${tutor.relation}`;
+
+    const list = document.getElementById('children-list');
+    list.innerHTML = '';
+    tutor.children.forEach(child => {
+      const row = document.createElement('div');
+      row.className = 'child-row';
+      row.innerHTML = `
+        <img class="child-avatar" src="https://ui-avatars.com/api/?name=${encodeURIComponent(child.name)}&background=8b8d98&color=fff&rounded=true&size=80">
+        <div class="child-info">
+          <span class="child-name">${child.name}</span>
+          <span class="child-room">${child.room}</span>
+        </div>
+        <i class="fa-solid fa-circle-check"></i>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function showValidationCard(tutor) {
+    renderTutor(tutor);
+    validationCard.classList.add('visible');
+    viewfinder.classList.remove('waiting-pulse');
+    scanLine.style.display = 'none';
+    viewfinderIcon.style.display = 'none';
+  }
+
+  function hideValidationCard() {
+    validationCard.classList.remove('visible');
+    scanLine.style.display = 'block';
+    viewfinderIcon.style.display = 'block';
+  }
+
+  function simulateScan() {
+    hideValidationCard();
+    viewfinder.classList.add('waiting-pulse');
+    setTimeout(() => {
+      tutorIndex = (tutorIndex + 1) % sampleTutors.length;
+      showValidationCard(sampleTutors[tutorIndex]);
+    }, 1100);
+  }
+
+  function showToast(message) {
+    toastText.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  simulateBtn.addEventListener('click', simulateScan);
+  viewfinder.addEventListener('click', simulateScan);
+  rescanBtn.addEventListener('click', hideValidationCard);
+
+  confirmBtn.addEventListener('click', () => {
+    showToast('Retiro confirmado correctamente');
+    setTimeout(hideValidationCard, 900);
+  });
+
+  // Estado inicial: se muestra ya validado para previsualizar el diseño de éxito
+  renderTutor(sampleTutors[0]);
+
+  // Reloj en vivo
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+</script>
+
 </body>
 </html>
