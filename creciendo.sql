@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-09-2026 a las 23:20:49
+-- Tiempo de generación: 29-09-2026 a las 02:19:42
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -50,6 +50,30 @@ CREATE TABLE `asistencia` (
   `hora_ingreso` time DEFAULT NULL,
   `registrado_por_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auxiliares`
+--
+
+CREATE TABLE `auxiliares` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `apellido` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `email` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `rol` varchar(50) COLLATE utf8_spanish_ci DEFAULT 'auxiliar',
+  `telefono` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `auxiliares`
+--
+
+INSERT INTO `auxiliares` (`id`, `nombre`, `apellido`, `email`, `password`, `rol`, `telefono`, `creado_en`) VALUES
+(1, 'Guillermo', 'Gutierrez', 'ggg123@gmail.com', '123456', 'auxiliar', NULL, '2026-09-29 00:15:33');
 
 -- --------------------------------------------------------
 
@@ -125,7 +149,7 @@ CREATE TABLE `usuarios` (
   `apellido` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `email` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `rol` varchar(30) COLLATE utf8_spanish_ci NOT NULL CHECK (`rol` in ('ADMINISTRADOR','DOCENTE','RECEPCION','TUTOR')),
+  `rol` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `telefono` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,
   `creado_en` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -135,7 +159,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `email`, `password`, `rol`, `telefono`, `creado_en`) VALUES
-(1, 'Guillermo', 'Gutierrez', 'ggg1122702187@gmail.com', '123456', 'tutor', NULL, '2026-09-28 21:18:52');
+(2, 'Guillermo', 'Gutierrez', 'ggg1122702187@gmail.com', '123456', 'auxiliar', NULL, '2026-09-28 23:41:01'),
+(3, 'Guillermo', 'Gutierrez', 'gustidjparavos@gmail.com', '123456', 'maestro', NULL, '2026-09-29 00:01:43');
 
 --
 -- Índices para tablas volcadas
@@ -153,6 +178,13 @@ ALTER TABLE `actividades_diarias`
 ALTER TABLE `asistencia`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nino_id` (`nino_id`,`fecha`);
+
+--
+-- Indices de la tabla `auxiliares`
+--
+ALTER TABLE `auxiliares`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indices de la tabla `ninos`
@@ -203,6 +235,12 @@ ALTER TABLE `asistencia`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `auxiliares`
+--
+ALTER TABLE `auxiliares`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `ninos`
 --
 ALTER TABLE `ninos`
@@ -230,7 +268,7 @@ ALTER TABLE `tutores_ninos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
