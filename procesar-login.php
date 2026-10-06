@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($email === '' || $contrasenia === '') {
         echo "<script>
                 alert('Por favor, ingresa tu correo y contraseña.');
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
               </script>";
         exit;
     }
@@ -64,12 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "<script>
                 alert('Correo, contraseña o rol incorrectos.');
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
               </script>";
         exit;
     }
 
 } else {
-    header('Location: index.html');
+    header('Location: login.html');
     exit;
 }
