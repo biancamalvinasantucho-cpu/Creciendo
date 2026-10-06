@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/registrar-usuario.css">
-    <title>Creciendo - Crear Cuenta</title>
+    <link rel="stylesheet" href="css/registrar-usuario.css">
+    <title>Creciendo - Registrar Usuario</title>
 </head>
 <body>
     <header>
         <h1>Creciendo</h1>
-        <h2>Registro de Nuevo Usuario</h2>
+        <h2>Crear una nueva cuenta</h2>
     </header>
-
-    <section class="contenedor-registro">
+    
+    <section class="contenedor-login">
         <form action="registrar-usuario.php" method="POST">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="apellido">Apellido</label>
                 <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
             </div>
             
             <div class="form-group">
@@ -34,27 +34,27 @@
                 <input type="password" id="contrasenia" name="contrasenia" placeholder="••••••••" required>
             </div>
 
-            <!-- Selección de Rol / Rubro -->
+            <!-- Selección de Rol con Radio Buttons -->
             <div class="form-group">
-                <label class="label-titulo">Seleccioná tu Rol / Rubro:</label>
+                <label class="label-titulo">Selecciona el Rol del usuario:</label>
                 <div class="radio-group">
                     <label class="radio-option">
-                        <input type="radio" name="rol" value="auxiliar" required>
-                        <span>Auxiliar</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="rol" value="tutor" required>
+                        <input type="radio" name="rol" value="tutor" required checked>
                         <span>Tutor/a</span>
                     </label>
                     <label class="radio-option">
                         <input type="radio" name="rol" value="maestro" required>
                         <span>Maestro/a</span>
                     </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="directores" required>
+                        <span>Director/a</span>
+                    </label>
                 </div>
             </div>
             
-            <button type="submit">Crear Cuenta</button>
-            <a href="index.html">¿Ya tenés cuenta? Iniciar Sesión</a>
+            <button type="submit" class="btn login-btn">Registrar Cuenta</button>
+            <a href="index.html">¿Ya tenés cuenta? Inicia Sesión</a>
         </form>
     </section>
 </body>

@@ -11,67 +11,59 @@ if (!$db) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Recibimos solo los datos del login
     $email       = isset($_POST['usuario']) ? trim($_POST['usuario']) : '';
     $contrasenia = isset($_POST['contrasenia']) ? trim($_POST['contrasenia']) : '';
-    $rolEnviado  = isset($_POST['rol']) ? strtolower(trim($_POST['rol'])) : '';
+    $rol         = (!empty($_POST['rol'])) ? strtolower(trim($_POST['rol'])) : 'tutor';
 
-    if (empty($email) || empty($contrasenia)) {
+    if ($email === '' || $contrasenia === '') {
         echo "<script>
-                alert('Por favor, completa el correo y la contraseña.');
+                alert('Por favor, ingresa tu correo y contraseña.');
                 window.location.href = 'index.html';
               </script>";
         exit;
     }
 
-    // Buscamos al usuario por su correo
-    $query = $db->prepare("SELECT id, nombre, apellido, email, password, rol FROM usuarios WHERE email = :email");
+    switch ($rol) {
+        case 'maestro':
+        case 'maestro/a':
+            $tablaEspecifica = 'maestros';
+            $redireccion     = 'roles/maestros/panel-maestros.html';
+            break;
+
+        case 'director':
+        case 'directora':
+        case 'directores':
+        case 'director/a':
+            $tablaEspecifica = 'directores';
+            $redireccion     = 'roles/directores/panel-director.html';
+            break;
+
+        case 'tutor':
+        case 'tutor/a':
+        default:
+            $tablaEspecifica = 'tutores';
+            $redireccion     = 'roles/tutores/panel-tutor.html';
+            break;
+    }
+
+    $query = $db->prepare("SELECT * FROM {$tablaEspecifica} WHERE email = :email");
     $query->execute([':email' => $email]);
     $usuario = $query->fetch(PDO::FETCH_ASSOC);
 
-    // Verificamos si existe el usuario y coincide la contraseña
-    if ($usuario && $usuario['password'] === $contrasenia) {
-
-        // Normalizamos el rol de la base de datos
-        $rolBD = strtolower($usuario['rol']);
-
-        // Verificamos si seleccionó un rol en el formulario y si coincide con su rol en la BD
-        if (!empty($rolEnviado) && $rolBD !== $rolEnviado) {
-            echo "<script>
-                    alert('El rol seleccionado no coincide con el registrado para esta cuenta.');
-                    window.location.href = 'index.html';
-                  </script>";
-            exit;
-        }
-
-        // Guardamos los datos en la sesión
+    if ($usuario && ($contrasenia === $usuario['password'] || password_verify($contrasenia, $usuario['password']))) {
+        
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre']     = $usuario['nombre'];
         $_SESSION['apellido']   = $usuario['apellido'];
         $_SESSION['email']      = $usuario['email'];
-        $_SESSION['rol']        = $rolBD;
+        $_SESSION['rol']        = $rol;
 
-        // Redirección según el rol correspondiente
-        switch ($rolBD) {
-            case 'auxiliar':
-                header('Location: roles/auxiliares/panel-auxiliar.html');
-                exit;
-
-            case 'maestro':
-            case 'maestro/a':
-                header('Location: roles/maestros/panel-maestros.html');
-                exit;
-
-            case 'tutor':
-            case 'tutor/a':
-            default:
-                header('Location: roles/tutores/panel-tutor.html');
-                exit;
-        }
+        header("Location: {$redireccion}");
+        exit;
 
     } else {
         echo "<script>
-                alert('Correo electrónico o contraseña incorrectos.');
+                alert('Correo, contraseña o rol incorrectos.');
                 window.location.href = 'index.html';
               </script>";
         exit;
