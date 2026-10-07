@@ -7,7 +7,41 @@
     --primary-hover: #2563eb;
     --border-color: #e5e7eb;
 }
+/* Botón Volver en Esquina Superior Izquierda */
+.btn-volver {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    color: #333333;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
 
+.btn-volver:hover {
+    background-color: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    color: #000000;
+}
+
+.btn-volver svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-volver:hover svg {
+    transform: translateX(-3px);
+}
 * {
     box-sizing: border-box;
     margin: 0;
