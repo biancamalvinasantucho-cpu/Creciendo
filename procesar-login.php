@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'directores':
         case 'director/a':
             $tablaEspecifica = 'directores';
-            $redireccion     = 'roles/directores/panel-director.html';
+            $redireccion     = 'roles/directores/panel-directores.html';
             break;
 
         case 'tutor':
