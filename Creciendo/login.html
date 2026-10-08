@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css?v=3">
+    <title>Creciendo - Iniciar Sesión</title>
+</head>
+<body>
+    <header>
+        <div class="brand-logo-container" style="display: flex; justify-content: center; margin-bottom: 15px;">
+            <a href="login.html">
+                <img src="img/logo.png" alt="Logo Creciendo" style="width: 130px; height: auto;">
+            </a>
+        </div>
+    <h1>Creciendo</h1>
+        <h2>Inicia Sesión en tu portal</h2>
+    </header>
+
+    <section class="contenedor-login">
+        <form action="procesar-login.php" method="POST">
+            <div class="form-group">
+                <label for="usuario">Correo Electrónico</label>
+                <input type="email" id="usuario" name="usuario" placeholder="tutor@ejemplo.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contrasenia">Contraseña</label>
+                <input type="password" id="contrasenia" name="contrasenia" placeholder="••••••••" required>
+            </div>
+
+            <!-- Selección de Rol con Radio Buttons -->
+            <div class="form-group">
+                <label class="label-titulo">Selecciona tu Rol / Rubro:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="tutor" required checked>
+                        <span>Tutor/a</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="maestro" required>
+                        <span>Maestro/a</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="directores" required>
+                        <span>Director/a</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn login-btn">Iniciar Sesión</button>
+            <a href="registrar-usuario.html">¿No tenés cuenta? Registrate</a>
+        </form>
+    </section>
+</body>
+</html>
