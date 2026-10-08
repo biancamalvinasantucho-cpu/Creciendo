@@ -7,41 +7,7 @@
     --primary-hover: #2563eb;
     --border-color: #e5e7eb;
 }
-/* Botón Volver en Esquina Superior Izquierda */
-.btn-volver {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background-color: #ffffff;
-    color: #333333;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s ease;
-    z-index: 1000;
-}
 
-.btn-volver:hover {
-    background-color: #f8fafc;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    color: #000000;
-}
-
-.btn-volver svg {
-    transition: transform 0.2s ease;
-}
-
-.btn-volver:hover svg {
-    transform: translateX(-3px);
-}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -60,28 +26,42 @@ body {
     padding: 20px;
 }
 
-h2 {
-    font-size: 1.8rem;
-    color: var(--text-main);
-    font-weight: 700;
-    margin-bottom: 20px;
+header {
     text-align: center;
+    margin-bottom: 24px;
 }
 
-form {
+header h1 {
+    font-size: 2rem;
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+header h2 {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Tarjeta Blanca Contenedora */
+.contenedor-login {
     background-color: var(--card-bg);
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     border: 1px solid rgba(229, 231, 235, 0.6);
+}
+
+form {
     display: flex;
     flex-direction: column;
 }
 
-form div {
-    margin-bottom: 14px;
+.form-group {
+    margin-bottom: 16px;
 }
 
 label {
@@ -113,7 +93,49 @@ input[type="password"]:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-button[type="submit"] {
+/* Selección de Rol / Radio Buttons */
+.label-titulo {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.radio-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.radio-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: #fafaf9;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.radio-option:hover {
+    border-color: var(--primary);
+    background-color: #ffffff;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+/* Botón principal */
+.login-btn {
     background-color: var(--primary);
     color: white;
     border: none;
@@ -123,13 +145,65 @@ button[type="submit"] {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-top: 10px;
+    margin-top: 8px;
+    width: 100%;
 }
 
-button[type="submit"]:hover {
+.login-btn:hover {
     background-color: var(--primary-hover);
 }
 
-button[type="submit"]:active {
+.login-btn:active {
     transform: scale(0.98);
+}
+
+/* Estilo para el enlace del final (Centrado y Azul) */
+a {
+    display: inline-block;
+    text-align: center;
+    margin-top: 16px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Botón Volver Flotante (Arriba a la Izquierda) */
+.btn-volver {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.btn-volver:hover {
+    background-color: #f8fafc !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    color: #000000 !important;
+}
+
+.btn-volver svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-volver:hover svg {
+    transform: translateX(-3px);
 }

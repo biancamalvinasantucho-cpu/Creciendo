@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/login.css?v=3">
     <title>Creciendo - Iniciar Sesión</title>
 </head>
 <body>
     <header>
-        <h1>Creciendo</h1>
+        <div class="brand-logo-container" style="display: flex; justify-content: center; margin-bottom: 15px;">
+            <a href="login.html">
+                <img src="img/logo.png" alt="Logo Creciendo" style="width: 130px; height: auto;">
+            </a>
+        </div>
+    <h1>Creciendo</h1>
         <h2>Inicia Sesión en tu portal</h2>
     </header>
+
+    <a href="javascript:history.back()" class="btn-volver">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        <span>Volver</span>
+    </a>
+
     <section class="contenedor-login">
         <form action="procesar-login.php" method="POST">
             <div class="form-group">

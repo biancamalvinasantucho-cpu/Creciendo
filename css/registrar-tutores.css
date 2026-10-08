@@ -1,0 +1,111 @@
+/* ==========================================
+   ESTILOS DEL FORMULARIO - REGISTRAR TUTOR
+   ========================================== */
+
+/* Contenedor del Formulario */
+.contenedor-login {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    border: 1px solid #e2e8f0;
+}
+
+/* Campos de Entrada (Inputs y Radio buttons) */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    font-size: 14px;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+/* Radio buttons para autorización de retiro */
+.form-group input[type="radio"] {
+    accent-color: #2563eb;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+/* Focus en los campos */
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="number"]:focus {
+    background-color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Botón Principal (Azul institucional) */
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* ==========================================
+   BOTÓN VOLVER MEJORADO
+   ========================================== */
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    color: #475569;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.btn-volver:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Creciendo · Procesador de Login Seguro
+ * Creciendo · Procesador de Login Seguro (Fusionado)
  */
 session_start();
 
@@ -14,7 +14,7 @@ if (!$db) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email       = isset($_POST['usuario']) ? trim($_POST['usuario']) : '';
     $contrasenia = isset($_POST['contrasenia']) ? trim($_POST['contrasenia']) : '';
-    $rol         = (!empty($_POST['rol'])) ? strtolower(trim($_POST['rol'])) : 'tutor';
+    $rolInput    = (!empty($_POST['rol'])) ? strtolower(trim($_POST['rol'])) : 'tutor';
 
     if ($email === '' || $contrasenia === '') {
         echo "<script>
@@ -25,13 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $tablaEspecifica = '';
-    $redireccion = '';
+    $redireccion     = '';
+    $rolLimpio       = '';
 
-    switch ($rol) {
+    // Normalizamos el rol y definimos la tabla donde se DEBE buscar
+    switch ($rolInput) {
         case 'maestro':
         case 'maestro/a':
             $tablaEspecifica = 'maestros';
-            $redireccion     = 'roles/maestros/panel-maestros.html';
+            $redireccion     = 'roles/maestros/panel-maestros.php';
+            $rolLimpio       = 'maestro';
             break;
 
         case 'director':
@@ -39,40 +42,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'directores':
         case 'director/a':
             $tablaEspecifica = 'directores';
-            $redireccion = 'roles/directores/panel-directores.html';
+            // Mantenemos tu ruta corregida que apunta al HTML (o PHP si luego lo cambias)
+            $redireccion     = 'roles/directores/panel-directores.php';
+            $rolLimpio       = 'director';
             break;
 
         case 'tutor':
         case 'tutor/a':
         default:
             $tablaEspecifica = 'tutores';
-            $redireccion = 'roles/tutores/panel-tutor.php';
+            $redireccion     = 'roles/tutores/panel-tutor.php';
+            $rolLimpio       = 'tutor';
             break;
     }
 
-    // Consultamos los datos del usuario en la tabla correspondiente
+    // Buscamos ÚNICAMENTE en la tabla del rol seleccionado.
     $query = $db->prepare("SELECT * FROM {$tablaEspecifica} WHERE email = :email LIMIT 1");
     $query->execute([':email' => $email]);
     $usuario = $query->fetch(PDO::FETCH_ASSOC);
 
-    // Verificamos contraseña (compatible con texto plano o password_hash)
+    // CORRECCIÓN CRÍTICA: Cambiamos $usuario['contrasenia'] por $usuario['password']
+    // para que coincida exactamente con las columnas de tu base de datos SQL.
     if ($usuario && ($contrasenia === $usuario['password'] || password_verify($contrasenia, $usuario['password']))) {
         
-        // Guardamos las variables de sesión generales y seguras
-        $_SESSION['usuario_id'] = $usuario['id'];
-        $_SESSION['nombre']     = $usuario['nombre'];
-        $_SESSION['apellido']   = $usuario['apellido'] ?? ''; 
-        $_SESSION['email']      = $usuario['email'];
-        $_SESSION['rol']        = $rol;
+        // Variables de sesión estandarizadas
+        $_SESSION['usuario_id']     = $usuario['id'];
+        $_SESSION['usuario_nombre'] = $usuario['nombre']; // Requerido por panel-maestros.php
+        $_SESSION['nombre']         = $usuario['nombre'];
+        $_SESSION['apellido']       = $usuario['apellido'] ?? ''; 
+        $_SESSION['email']          = $usuario['email'];
+        $_SESSION['rol']            = $rolLimpio; // Guarda siempre 'maestro', 'director' o 'tutor'
 
-        // Si es tutor, guardamos su estructura específica para que el panel cargue sus datos y QR
-        if ($rol === 'tutor' || $rol === 'tutor/a') {
+        // Si es maestro, le asignamos su sala (o 1 por defecto)
+        if ($rolLimpio === 'maestro') {
+            $_SESSION['sala_id'] = $usuario['sala_id'] ?? 1;
+        }
+
+        // Si es tutor, guardamos su estructura específica para paneles y QR
+        if ($rolLimpio === 'tutor') {
             $_SESSION['tutor'] = [
-                'id'      => $usuario['id'],
-                'nombre'  => $usuario['nombre'],
-                'apellido'=> $usuario['apellido'] ?? '',
-                'dni'     => $usuario['dni'] ?? '',
-                'vinculo' => 'Tutor/a'
+                'id'       => $usuario['id'],
+                'nombre'   => $usuario['nombre'],
+                'apellido' => $usuario['apellido'] ?? '',
+                'dni'      => $usuario['dni'] ?? '',
+                'vinculo'  => 'Tutor/a'
             ];
         }
 
@@ -91,3 +104,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: login.html');
     exit;
 }
+?>
