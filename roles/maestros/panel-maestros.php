@@ -2,10 +2,10 @@
 session_start();
 
 // Control de seguridad: Si no está logueada como docente, mandarla al login
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'maestro' \vert{}\vert{} !isset($_SESSION['sala_id'])) {
-    header("Location: login.html");
-    exit;
-}
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'maestro' || !isset($_SESSION['sala_id']))
+    header("Location: ../../login.html");
+exit;
+
 
 // Variables obtenidas de la sesión activa
 $maestro_id     =$_SESSION['usuario_id'];
