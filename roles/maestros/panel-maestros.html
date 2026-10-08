@@ -1,475 +1,334 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel de la Maestra · Sala Los Pollitos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-  :root {
-    --bg-color: #f7f3ed;
-    --card-bg: #ffffff;
-    --text-main: #2b2d42;
-    --primary: #3b82f6;
-    --accent-peach: #f4a261;
-    --border-color: #e5e7eb;
-
-    /* tokens derivados para completar el sistema */
-    --text-muted: #8b8d98;
-    --sleep-color: #8b7fd6;
-    --success-soft: #eef6ff;
-    --shadow-soft: 0 6px 18px rgba(43, 45, 66, 0.07);
-    --shadow-hover: 0 10px 24px rgba(43, 45, 66, 0.11);
-    --radius-card: 15px;
-    --radius-pill: 12px;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    background: var(--bg-color);
-    color: var(--text-main);
-    font-family: 'Inter', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  h1, h2, h3, .brand {
-    font-family: 'Nunito', sans-serif;
-  }
-
-  /* ---------- HEADER ---------- */
-  header.top-bar {
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border-color);
-    padding: 18px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .brand-block {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .brand-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: var(--primary);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .brand h1 {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 800;
-  }
-
-  .brand p {
-    margin: 2px 0 0;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  .day-info {
-    text-align: right;
-  }
-
-  .day-info .date {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: capitalize;
-  }
-
-  .presence-count {
-    margin-top: 4px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--success-soft);
-    color: var(--primary);
-    font-weight: 600;
-    font-size: 13px;
-    padding: 5px 12px;
-    border-radius: 999px;
-  }
-
-  /* ---------- MAIN GRID ---------- */
-  main {
-    padding: 28px 32px 60px;
-    max-width: 1280px;
-    margin: 0 auto;
-  }
-
-  .section-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-main);
-    margin: 0 0 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-title i { color: var(--accent-peach); }
-
-  .students-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-  }
-
-  /* ---------- STUDENT CARD ---------- */
-  .student-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-card);
-    padding: 20px 18px;
-    box-shadow: var(--shadow-soft);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-  }
-
-  .student-card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-  }
-
-  .avatar-wrap {
-    position: relative;
-    margin-bottom: 10px;
-  }
-
-  .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--bg-color);
-    box-shadow: 0 0 0 1px var(--border-color);
-    display: block;
-  }
-
-  .note-flag {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--accent-peach);
-    color: #fff;
-    font-size: 10px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--card-bg);
-  }
-
-  .note-flag.visible { display: flex; }
-
-  .student-name {
-    margin: 0 0 14px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-main);
-  }
-
-  .quick-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 9px 4px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-muted);
-    font-family: inherit;
-    font-size: 10.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
-  }
-
-  .action-btn i { font-size: 15px; }
-
-  .action-btn:hover { border-color: var(--text-muted); }
-
-  .action-btn:active { transform: scale(0.94); }
-
-  .action-btn.active[data-action="comio"] {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
-  }
-
-  .action-btn.active[data-action="durmio"] {
-    background: var(--sleep-color);
-    border-color: var(--sleep-color);
-    color: #fff;
-  }
-
-  .action-btn.active[data-action="panal"] {
-    background: var(--accent-peach);
-    border-color: var(--accent-peach);
-    color: #fff;
-  }
-
-  .observation-btn {
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-family: inherit;
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 8px 6px;
-    border-top: 1px dashed var(--border-color);
-    margin-top: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: color 0.15s ease;
-  }
-
-  .observation-btn:hover { color: var(--primary); }
-
-  /* ---------- MODAL ---------- */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(43, 45, 66, 0.35);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 50;
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal-box {
-    background: var(--card-bg);
-    border-radius: var(--radius-card);
-    padding: 24px;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: var(--shadow-hover);
-  }
-
-  .modal-box h2 {
-    margin: 0 0 4px;
-    font-size: 17px;
-  }
-
-  .modal-box .modal-sub {
-    margin: 0 0 16px;
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  .modal-box textarea {
-    width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-family: inherit;
-    font-size: 13.5px;
-    color: var(--text-main);
-    background: var(--bg-color);
-  }
-
-  .modal-box textarea:focus,
-  .action-btn:focus-visible,
-  .observation-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-  }
-
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  .modal-actions button {
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 9px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    border: 1px solid var(--border-color);
-  }
-
-  .btn-cancel { background: transparent; color: var(--text-muted); }
-  .btn-save { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-  @media (max-width: 640px) {
-    header.top-bar { padding: 16px 18px; }
-    main { padding: 20px 18px 40px; }
-    .day-info { text-align: left; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creciendo - Panel de Maestros</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para Íconos y Estrellas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .estrella-btn {
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .estrella-btn.logrado {
+            color: #ffc107; /* Amarillo dorado */
+            transform: scale(1.2);
+        }
+        .card-aviso {
+            border-left: 4px solid #0d6efd;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
 
-<header class="top-bar">
-  <div class="brand-block">
-    <div class="brand-icon"><i class="fa-solid fa-child-reaching"></i></div>
-    <div class="brand">
-      <h1>Panel de la Maestra</h1>
-      <p>Sala Los Pollitos</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Creciendo | Panel Maestros</a>
+            <span class="navbar-text text-white" id="badge-sala">
+                <i class="fa-solid fa-chalkboard-user me-1"></i> Asignado a: <strong id="nombre-sala">Cargando...</strong>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Pestañas de Navegación del Panel -->
+        <ul class="nav nav-pills nav-justified mb-4 bg-white p-2 rounded shadow-sm" id="panelTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="avisos-tab" data-bs-toggle="tab" data-bs-target="#avisos" type="button"><i class="fa-solid fa-envelope me-2"></i>Avisos de Padres</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="fotos-tab" data-bs-toggle="tab" data-bs-target="#fotos" type="button"><i class="fa-solid fa-camera me-2"></i>Subir Fotos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="avances-tab" data-bs-toggle="tab" data-bs-target="#avances" type="button"><i class="fa-solid fa-star me-2"></i>Avances y Estrellitas</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ia-tab" data-bs-toggle="tab" data-bs-target="#ia" type="button"><i class="fa-solid fa-robot me-2"></i>Asistente IA</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="panelTabsContent">
+            
+            <!-- 1. BANDEJA DE AVISOS PRIVADOS -->
+            <div class="tab-pane fade show active" id="avisos" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white"><h5 class="mb-0">Bandeja de Avisos de la Sala</h5></div>
+                    <div class="card-body" id="contenedor-avisos">
+                        <div class="card card-aviso mb-3 bg-light">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold mb-0">Tutor: María González (Alumno: Mateo)</h6>
+                                    <small class="text-muted">Hoy, 08:30 HS</small>
+                                </div>
+                                <p class="mb-0 text-secondary">"Hola seño, hoy Mateo estuvo con un poco de mocos. Le dejé un remedio en la mochila por si le da fiebre."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. SUBIDA DE FOTOS -->
+            <div class="tab-pane fade" id="fotos" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white"><h5 class="mb-0">Subir Registro Fotográfico</h5></div>
+                    <div class="card-body">
+                        <form id="form-subir-foto">
+                            <div class="mb-3">
+                                <label class="form-label">Seleccionar Alumno</label>
+                                <select class="form-select" id="select-nino-foto" required>
+                                    <option value="">Seleccione un niño...</option>
+                                    <option value="1">Mateo López</option>
+                                    <option value="2">Sofía Martínez</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Foto(s)</label>
+                                <input type="file" class="form-control" id="archivo-foto" accept="image/*" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-upload me-2"></i>Guardar Foto</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. AVANCES Y ESTRELLITAS CON IA INTEGRADA -->
+            <div class="tab-pane fade" id="avances" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="mb-0">Control de Hitos de Desarrollo</h5>
+                        <div class="d-flex gap-2 align-items-center">
+                            <select class="form-select w-auto" id="select-nino-avances" onchange="cargarHitosNino(this.value)">
+                                <option value="1">Alumno: Mateo López</option>
+                                <option value="2">Alumno: Sofía Martínez</option>
+                            </select>
+                            <button class="btn btn-outline-primary" onclick="generarInformeAvancesIA()">
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Redactar Informe con IA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Resultado del informe generado por IA -->
+                        <div class="card bg-light border-info mb-3 d-none" id="caja-informe-avances">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-primary"><i class="fa-solid fa-robot me-2"></i>Informe de Progreso (Generado por IA):</h6>
+                                <p id="texto-informe-avances" class="mb-0 text-dark" style="white-space: pre-line;"></p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Eje Temático</th>
+                                        <th>Tema / Hito</th>
+                                        <th class="text-center">Logrado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-hitos">
+                                    <tr>
+                                        <td>Exploración Sensorial</td>
+                                        <td>Reconocimiento de texturas y tacto</td>
+                                        <td class="text-center">
+                                            <i class="fa-solid fa-star estrella-btn" onclick="toggleEstrella(this, 1, 101)"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Movimiento y Equilibrio</td>
+                                        <td>Gatear y desplazarse de forma segura</td>
+                                        <td class="text-center">
+                                            <i class="fa-solid fa-star estrella-btn logrado" onclick="toggleEstrella(this, 1, 102)"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ASISTENTE IA PARA NOTAS -->
+            <div class="tab-pane fade" id="ia" role="tabpanel">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white"><h5 class="mb-0">Redactor Pedagógico Asistido por IA</h5></div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Notas informales / Borrador de la Seño:</label>
+                            <textarea class="form-control" id="notas-borrador" rows="3" placeholder="Ej: Juan hoy comió toda la comida solo, pero en el patio le costó compartir los juguetes y lloró un poco."></textarea>
+                        </div>
+                        <button class="btn btn-success mb-3" onclick="sintetizarConIA()">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Sintetizar y Organizar con IA
+                        </button>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-primary">Resultado Pulido para la Familia / Legajo:</label>
+                            <textarea class="form-control bg-light" id="notas-resultado-ia" rows="4" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-  </div>
-  <div class="day-info">
-    <div class="date" id="today-date">martes, 23 de septiembre</div>
-    <span class="presence-count"><i class="fa-solid fa-user-check"></i> 8 presentes</span>
-  </div>
-</header>
 
-<main>
-  <h2 class="section-title"><i class="fa-solid fa-users"></i> Alumnos presentes hoy</h2>
+    <!-- Script Bootstrap & Lógica del Frontend -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuración Inicial
+        const SALA_MAESTROS_ID = 2; // Reemplazar según el ID de sala del usuario logueado
+        const API_KEY_GEMINI = "AIzaSy_AQ.Ab8RN6IqKgPGBKhcoAAfMTyE0yuZIb2djXnIV_ASwJx9PKiVzg";
 
-  <div class="students-grid" id="students-grid">
-    <!-- Las tarjetas se repiten con la misma estructura para cada alumno -->
-  </div>
-</main>
+        document.getElementById('nombre-sala').innerText = `Sala ${SALA_MAESTROS_ID}`;
 
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <h2 id="modal-student-name">Observación</h2>
-    <p class="modal-sub">Escribí una nota cualitativa sobre el día del niño o la niña.</p>
-    <textarea id="modal-textarea" placeholder="Ej: Estuvo muy participativa en la actividad de pintura..."></textarea>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="modal-cancel">Cancelar</button>
-      <button class="btn-save" id="modal-save">Guardar nota</button>
-    </div>
-  </div>
-</div>
+        // Lógica de las Estrellitas (Toggle dinámico)
+        async function toggleEstrella(elemento, ninoId, hitoId) {
+            const esLogrado = elemento.classList.toggle('logrado');
+            
+            try {
+                const response = await fetch('/api/guardar-logro.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nino_id: ninoId,
+                        hito_id: hitoId,
+                        estado: esLogrado
+                    })
+                });
+                console.log(`Hito ${hitoId} guardado como: ${esLogrado}`);
+            } catch (error) {
+                console.error('Error al guardar estrella:', error);
+            }
+        }
 
-<script>
-  const students = [
-    { name: "Sofía Martínez", color: "3b82f6" },
-    { name: "Mateo Gómez", color: "f4a261" },
-    { name: "Valentina López", color: "8b7fd6" },
-    { name: "Benjamín Fernández", color: "3b82f6" },
-    { name: "Isabella Rodríguez", color: "f4a261" },
-    { name: "Thiago Pérez", color: "8b7fd6" },
-    { name: "Emma García", color: "3b82f6" },
-    { name: "Santiago Díaz", color: "f4a261" },
-  ];
+        // Lógica para redactar informe de la tabla de avances
+        async function generarInformeAvancesIA() {
+            const selectNino = document.getElementById('select-nino-avances');
+            const nombreNino = selectNino.options[selectNino.selectedIndex]?.text || "el alumno";
 
-  const grid = document.getElementById('students-grid');
+            const filas = document.querySelectorAll('#tabla-hitos tr');
+            let logrados = [];
+            let pendientes = [];
 
-  students.forEach((student, index) => {
-    const initialsUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=${student.color}&color=fff&rounded=true&size=128&bold=true&font-size=0.4`;
+            filas.forEach(fila => {
+                const celdas = fila.querySelectorAll('td');
+                if (celdas.length >= 3) {
+                    const eje = celdas[0].innerText.trim();
+                    const tema = celdas[1].innerText.trim();
+                    const tieneEstrella = celdas[2].querySelector('.estrella-btn')?.classList.contains('logrado');
 
-    const card = document.createElement('article');
-    card.className = 'student-card';
-    card.dataset.studentId = index;
-    card.innerHTML = `
-      <div class="avatar-wrap">
-        <img class="avatar" src="${initialsUrl}" alt="Foto de ${student.name}">
-        <span class="note-flag" data-flag="${index}"><i class="fa-solid fa-pen"></i></span>
-      </div>
-      <h3 class="student-name">${student.name}</h3>
-      <div class="quick-actions">
-        <button class="action-btn" data-action="comio" title="Comió" aria-pressed="false">
-          <i class="fa-solid fa-utensils"></i>
-          <span>Comió</span>
-        </button>
-        <button class="action-btn" data-action="durmio" title="Durmió" aria-pressed="false">
-          <i class="fa-solid fa-moon"></i>
-          <span>Durmió</span>
-        </button>
-        <button class="action-btn" data-action="panal" title="Cambio de pañal" aria-pressed="false">
-          <i class="fa-solid fa-baby"></i>
-          <span>Pañal</span>
-        </button>
-      </div>
-      <button class="observation-btn" data-open-modal="${index}" data-student-name="${student.name}">
-        <i class="fa-regular fa-pen-to-square"></i> Anotar observación
-      </button>
-    `;
-    grid.appendChild(card);
-  });
+                    if (tieneEstrella) {
+                        logrados.push(`${eje}: ${tema}`);
+                    } else {
+                        pendientes.push(`${eje}: ${tema}`);
+                    }
+                }
+            });
 
-  // Toggle de botones rápidos
-  grid.addEventListener('click', (e) => {
-    const btn = e.target.closest('.action-btn');
-    if (!btn) return;
-    const isActive = btn.classList.toggle('active');
-    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-  });
+            if (logrados.length === 0 && pendientes.length === 0) {
+                alert("No hay datos en la tabla para evaluar.");
+                return;
+            }
 
-  // Modal de observación
-  const overlay = document.getElementById('modal-overlay');
-  const modalTitle = document.getElementById('modal-student-name');
-  const textarea = document.getElementById('modal-textarea');
-  let currentStudentId = null;
-  const notes = {};
+            const cajaResumen = document.getElementById('caja-informe-avances');
+            const textoResumen = document.getElementById('texto-informe-avances');
+            cajaResumen.classList.remove('d-none');
+            textoResumen.innerText = "Analizando estrellas y generando informe pedagógico...";
 
-  grid.addEventListener('click', (e) => {
-    const openBtn = e.target.closest('[data-open-modal]');
-    if (!openBtn) return;
-    currentStudentId = openBtn.dataset.openModal;
-    modalTitle.textContent = openBtn.dataset.studentName;
-    textarea.value = notes[currentStudentId] || '';
-    overlay.classList.add('open');
-    textarea.focus();
-  });
+            const prompt = `Sos un orientador pedagógico de un jardín maternal (Sala ${SALA_MAESTROS_ID}).
+Analizá los siguientes datos de evaluación de ${nombreNino}:
 
-  function closeModal() {
-    overlay.classList.remove('open');
-    currentStudentId = null;
-  }
+Hitos ALCANZADOS (con estrella):
+${logrados.length > 0 ? logrados.map(i => `- ${i}`).join('\n') : 'Ninguno registrado aún.'}
 
-  document.getElementById('modal-cancel').addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+Hitos EN PROCESO (sin estrella):
+${pendientes.length > 0 ? pendientes.map(i => `- ${i}`).join('\n') : 'Todos alcanzados.'}
 
-  document.getElementById('modal-save').addEventListener('click', () => {
-    if (currentStudentId === null) return;
-    notes[currentStudentId] = textarea.value.trim();
-    const flag = document.querySelector(`[data-flag="${currentStudentId}"]`);
-    if (flag) flag.classList.toggle('visible', notes[currentStudentId].length > 0);
-    closeModal();
-  });
+Con base en estos datos exactos, redactá un informe pedagógico cualitativo de 2 párrafos para transmitir a la familia. Destacá los logros actuales y menciona con tacto los puntos donde se seguirá trabajando. Usá un tono profesional y empático.`;
 
-  // Fecha de hoy en español
-  const dateEl = document.getElementById('today-date');
-  const today = new Date();
-  dateEl.textContent = today.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
-</script>
+            try {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': API_KEY_GEMINI
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
 
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error("Error de Gemini API:", data.error);
+                    textoResumen.innerText = `Error de API: ${data.error.message || 'Verificá tu API Key'}`;
+                    return;
+                }
+
+                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                    textoResumen.innerText = data.candidates[0].content.parts[0].text;
+                } else {
+                    textoResumen.innerText = "No se pudo generar una respuesta. Reintentá nuevamente.";
+                }
+
+            } catch (error) {
+                console.error("Error de conexión:", error);
+                textoResumen.innerText = "Error al conectar con la IA. Verificá tu API Key o la conexión a internet.";
+            }
+        }
+
+        // Lógica para procesar texto libre con IA
+        async function sintetizarConIA() {
+            const borrador = document.getElementById('notas-borrador').value;
+            const campoResultado = document.getElementById('notas-resultado-ia');
+
+            if (!borrador.trim()) {
+                alert('Escribí una nota breve primero.');
+                return;
+            }
+
+            campoResultado.value = "Generando resumen profesional...";
+
+            try {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': API_KEY_GEMINI
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Sos un asistente psicopedagógico de un jardín maternal. Toma estas notas breves escritas por la maestra: "${borrador}". 
+                                Reescribilas en un informe pedagógico amigable, profesional y bien estructurado de 2 párrafos para comunicar a los padres.`
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error("Error de Gemini API:", data.error);
+                    campoResultado.value = `Error de API: ${data.error.message || 'Verificá tu API Key'}`;
+                    return;
+                }
+
+                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                    campoResultado.value = data.candidates[0].content.parts[0].text;
+                } else {
+                    campoResultado.value = "No se pudo generar una respuesta. Reintentá nuevamente.";
+                }
+
+            } catch (error) {
+                console.error("Error de conexión:", error);
+                campoResultado.value = "Error al conectar con la IA. Verificá tu API Key o la conexión a internet.";
+            }
+        }
+    </script>
 </body>
 </html>

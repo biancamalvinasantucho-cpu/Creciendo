@@ -33,19 +33,6 @@ body {
     font-size: 20px;
 }
 
-/* --- CLASES NUEVAS PARA EL LOGO --- */
-.brand-logo-container {
-    display: flex;
-    align-items: center;
-}
-
-.logo-navbar {
-    height: 75px; 
-    width: auto;
-    object-fit: contain;
-    margin-right: 10px; /* Separación entre el logo y el título/badge */
-}
-
 .role-badge {
     background-color: #e2e8f0;
     color: #475569;
